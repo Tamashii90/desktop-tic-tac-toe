@@ -1,34 +1,43 @@
 package main;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 
+import static main.Main.*;
+
 public class Cell extends JButton {
-    Cell(String title, String name) {
-        super(title);
+    int x;
+    int y;
+
+    Cell(int x, int y) {
+        this.x = x;
+        this.y = y;
         setFocusPainted(false);
+        setEnabled(false);
         setFont(new Font("Courier", Font.BOLD, 40));
-        setName("Button" + name);
         addActionListener(this::clickHandler);
     }
 
+    boolean isEmpty() {
+        return this.getText().equals(" ");
+    }
+
     public void clickHandler(ActionEvent e) {
-        if (StatusPanel.getState() != StatusPanel.State.IN_PROGRESS &&
-                StatusPanel.getState() != StatusPanel.State.NOT_STARTED) {
+        if (gameState.getGameState() != GameState.IN_PROGRESS) {
             return;
         }
-        for (int i = 0; i <= 2; i++) {
-            for (int j = 0; j <= 2; j++) {
-                if (Main.BUTTONS[i][j] == this) {
-                    if (Main.ARRANGEMENT[i][j] == ' ') {
-                        char symbol = Main.makeMove(i, j);
-                        setText("" + symbol);
-                        StatusPanel.handleState(symbol);
-                    }
-                    break;
-                }
-            }
+
+        var clickedBtn = (JButton) e.getSource();
+        String symbol = currPlayer.symbol;
+        if (clickedBtn == this && this.isEmpty()) {
+            board.enterSymbolAt(this.x, this.y);
+            gameState.handleGameState(symbol);
+        }
+
+        if (gameState == GameState.IN_PROGRESS) {
+            currPlayer = currPlayer == playerX ? playerO : playerX;
+            currPlayer.makeMove();
         }
     }
 }
