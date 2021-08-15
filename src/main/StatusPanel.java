@@ -14,9 +14,13 @@ public class StatusPanel extends JPanel {
         setMaximumSize(new Dimension(400, 20));
         setBorder(new EmptyBorder(8, 8, 8, 8));
         setLayout(new BorderLayout());
-        statusLabel = new JLabel(Main.gameState.stateStr);
+        statusLabel = new JLabel("Game is not started");
         statusLabel.setName("LabelStatus");
 
         add(statusLabel, BorderLayout.WEST);
+    }
+
+    void setStatusText(String txt) {
+        statusLabel.setText(txt);
     }
 }

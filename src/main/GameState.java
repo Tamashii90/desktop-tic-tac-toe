@@ -1,22 +1,30 @@
 package main;
 
-import static main.Main.*;
-
 enum GameState {
-    NOT_STARTED("Game is not started"),
-    IN_PROGRESS("Game in progress"),
-    X_WINS("X wins"),
-    O_WINS("O wins"),
-    Draw("Draw");
+    NOT_STARTED,
+    IN_PROGRESS,
+    X_WINS,
+    O_WINS,
+    Draw;
 
-    String stateStr;
-
-    GameState(String stateStr) {
-        this.stateStr = stateStr;
+    public String toString() {
+        String playerType = Main.currPlayer.isHuman ? "Human" : "Robot";
+        String symbol = Main.currPlayer.symbol;
+        switch (this) {
+            case Draw:
+                return "Draw";
+            case NOT_STARTED:
+                return "Game is not started";
+            case O_WINS:
+            case X_WINS:
+                return String.format("%s Player(%s) wins", playerType, symbol);
+            default:
+                return String.format("The turn of %s Player(%s)", playerType, symbol);
+        }
     }
+
     void setGameState(GameState gameState) {
         Main.gameState = gameState;
-        Main.statusPanel.statusLabel.setText(gameState.stateStr);
     }
 
     GameState getGameState() {
@@ -24,15 +32,18 @@ enum GameState {
     }
 
     void handleGameState(String symbol) {
-        GameState newGameState = GameState.IN_PROGRESS;
+        GameState newGameState = Main.gameState;
+
         if (Main.isWinner(symbol)) {
             newGameState = GameState.valueOf(symbol + "_WINS");
-            board.disableCells();
+            Main.board.disableCells();
         } else if (Main.board.getCountOf(" ") == 0) {
             newGameState = GameState.Draw;
-            board.disableCells();
+            Main.board.disableCells();
         }
+
         setGameState(newGameState);
+        Main.statusPanel.setStatusText(newGameState.toString());
     }
 }
 

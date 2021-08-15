@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 
 import static main.Main.*;
+import static main.GameState.*;
 
 public class Cell extends JButton {
     int x;
@@ -24,19 +25,17 @@ public class Cell extends JButton {
     }
 
     public void clickHandler(ActionEvent e) {
-        if (gameState.getGameState() != GameState.IN_PROGRESS) {
+        var clickedBtn = (JButton) e.getSource();
+
+        if (gameState.getGameState() != IN_PROGRESS || clickedBtn != this || !this.isEmpty()) {
             return;
         }
+        board.enterSymbolAt(this.x, this.y);
+        gameState.handleGameState(currPlayer.symbol);
 
-        var clickedBtn = (JButton) e.getSource();
-        String symbol = currPlayer.symbol;
-        if (clickedBtn == this && this.isEmpty()) {
-            board.enterSymbolAt(this.x, this.y);
-            gameState.handleGameState(symbol);
-        }
-
-        if (gameState == GameState.IN_PROGRESS) {
+        if (gameState == IN_PROGRESS) {
             currPlayer = currPlayer == playerX ? playerO : playerX;
+            statusPanel.setStatusText(gameState.toString());
             currPlayer.makeMove();
         }
     }

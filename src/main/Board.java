@@ -27,6 +27,7 @@ public class Board extends JPanel {
         String symbol = String.valueOf(Main.currPlayer.symbol);
         foundCell.setText(symbol);
     }
+
     long getCountOf(String symbol) {
         return Arrays.stream(this.cells)
                 .flatMap(Arrays::stream)

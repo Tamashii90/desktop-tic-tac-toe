@@ -2,6 +2,8 @@ package main;
 
 import javax.swing.JFrame;
 import javax.swing.BoxLayout;
+import javax.swing.JMenuBar;
+import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -15,6 +17,7 @@ public class Main extends JFrame {
     static Board board = new Board();
     static StatusPanel statusPanel = new StatusPanel();
     static ControlPanel controlPanel = new ControlPanel();
+    static MenuGame menuGame = new MenuGame("Game");
 
 
     Main() {
@@ -38,7 +41,7 @@ public class Main extends JFrame {
                 .filter(el -> el.getText().equals(symbol))
                 .collect(Collectors.toList());
         boolean isWinnerByRow;
-        boolean isWinnerByCol;
+        boolean isWinnerByCol = false;
 
         if (matchingSymbolsList.size() < 3) {
             return false;
@@ -50,17 +53,18 @@ public class Main extends JFrame {
             return true;
         }
 
-        isWinnerByRow = matchingSymbolsList.stream()
-                .skip(1)
-                .allMatch(cell -> matchingSymbolsList.get(0).x == cell.x);
-        if (isWinnerByRow) {
-            return true;
+        for (var matchingSymbol : matchingSymbolsList) {
+            isWinnerByRow = matchingSymbolsList.stream()
+                    .filter(cell -> matchingSymbol.x == cell.x)
+                    .count() == 3;
+            if (isWinnerByRow) {
+                return true;
+            }
+
+            isWinnerByCol = matchingSymbolsList.stream()
+                    .filter(cell -> matchingSymbol.y == cell.y)
+                    .count() == 3;
         }
-
-        isWinnerByCol = matchingSymbolsList.stream()
-                .skip(1)
-                .allMatch(cell -> matchingSymbolsList.get(0).y == cell.y);
-
         return isWinnerByCol;
     }
 
@@ -71,6 +75,11 @@ public class Main extends JFrame {
     }
 
     void initComponents() {
+        JMenuBar menuBar = new JMenuBar();
+        menuGame.setMnemonic(KeyEvent.VK_G);
+        menuBar.add(menuGame);
+
+        setJMenuBar(menuBar);
         add(controlPanel);
         add(board);
         add(statusPanel);
