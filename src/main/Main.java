@@ -3,9 +3,10 @@ package main;
 import javax.swing.JFrame;
 import javax.swing.BoxLayout;
 import javax.swing.JMenuBar;
+import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main extends JFrame {
 
@@ -36,6 +37,8 @@ public class Main extends JFrame {
 
 
     static boolean isWinner(String symbol) {
+        boolean isWinner = false;
+        List<Cell> winningBtns = new ArrayList<>();
         if (board.getCountOf(symbol) < 3) {
             return false;
         }
@@ -43,27 +46,36 @@ public class Main extends JFrame {
         if (board.cells[0][0].equals(symbol)
                 && board.cells[1][1].equals(symbol)
                 && board.cells[2][2].equals(symbol)) {
-            return true;
-        }
-        if (board.cells[0][2].equals(symbol)
+            isWinner = true;
+            winningBtns = List.of(board.cells[0][0], board.cells[1][1], board.cells[2][2]);
+        } else if (board.cells[0][2].equals(symbol)
                 && board.cells[1][1].equals(symbol)
                 && board.cells[2][0].equals(symbol)) {
-            return true;
+            isWinner = true;
+            winningBtns = List.of(board.cells[0][2], board.cells[1][1], board.cells[2][0]);
         }
 
         for (int i = 0, j = 0; i < 3; i++, j++) {
             if (board.cells[i][j].equals(symbol)
                     && board.cells[i][(j + 1) % 3].equals(symbol)
                     && board.cells[i][(j + 2) % 3].equals(symbol)) {
-                return true;
-            }
-            if (board.cells[i][j].equals(symbol)
+                isWinner = true;
+                winningBtns = List.of(board.cells[i][j], board.cells[i][(j + 1) % 3],
+                        board.cells[i][(j + 2) % 3]);
+                break;
+            } else if (board.cells[i][j].equals(symbol)
                     && board.cells[(i + 1) % 3][j].equals(symbol)
                     && board.cells[(i + 2) % 3][j].equals(symbol)) {
-                return true;
+                isWinner = true;
+                winningBtns = List.of(board.cells[i][j], board.cells[(i + 1) % 3][j],
+                        board.cells[(i + 2) % 3][j]);
+                break;
             }
         }
-        return false;
+        winningBtns.forEach(btn -> {
+            btn.setBackground(Color.CYAN);
+        });
+        return isWinner;
     }
 
 
