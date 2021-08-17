@@ -36,36 +36,34 @@ public class Main extends JFrame {
 
 
     static boolean isWinner(String symbol) {
-        var matchingSymbolsList = Arrays.stream(board.cells)
-                .flatMap(Arrays::stream)
-                .filter(el -> el.getText().equals(symbol))
-                .collect(Collectors.toList());
-        boolean isWinnerByRow;
-        boolean isWinnerByCol = false;
-
-        if (matchingSymbolsList.size() < 3) {
+        if (board.getCountOf(symbol) < 3) {
             return false;
         }
 
-        // Checking diagonally
-        if (matchingSymbolsList.stream().filter(el -> el.x == el.y).count() == 3 ||
-                matchingSymbolsList.stream().filter(el -> 2 - el.x == el.y).count() == 3) {
+        if (board.cells[0][0].getText().equals(symbol)
+                && board.cells[1][1].getText().equals(symbol)
+                && board.cells[2][2].getText().equals(symbol)) {
+            return true;
+        }
+        if (board.cells[0][2].getText().equals(symbol)
+                && board.cells[1][1].getText().equals(symbol)
+                && board.cells[2][0].getText().equals(symbol)) {
             return true;
         }
 
-        for (var matchingSymbol : matchingSymbolsList) {
-            isWinnerByRow = matchingSymbolsList.stream()
-                    .filter(cell -> matchingSymbol.x == cell.x)
-                    .count() == 3;
-            if (isWinnerByRow) {
+        for (int i = 0, j = 0; i < 3; i++, j++) {
+            if (board.cells[i][j].getText().equals(symbol)
+                    && board.cells[i][(j + 1) % 3].getText().equals(symbol)
+                    && board.cells[i][(j + 2) % 3].getText().equals(symbol)) {
                 return true;
             }
-
-            isWinnerByCol = matchingSymbolsList.stream()
-                    .filter(cell -> matchingSymbol.y == cell.y)
-                    .count() == 3;
+            if (board.cells[i][j].getText().equals(symbol)
+                    && board.cells[(i + 1) % 3][j].getText().equals(symbol)
+                    && board.cells[(i + 2) % 3][j].getText().equals(symbol)) {
+                return true;
+            }
         }
-        return isWinnerByCol;
+        return false;
     }
 
 
