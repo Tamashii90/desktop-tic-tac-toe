@@ -20,6 +20,10 @@ public class Cell extends JButton {
         addActionListener(this::clickHandler);
     }
 
+    public boolean equals(Object obj) {
+        return this.getText().equals(obj);
+    }
+
     boolean isEmpty() {
         return this.getText().equals(" ");
     }

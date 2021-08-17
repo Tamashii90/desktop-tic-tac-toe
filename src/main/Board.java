@@ -31,7 +31,7 @@ public class Board extends JPanel {
     long getCountOf(String symbol) {
         return Arrays.stream(this.cells)
                 .flatMap(Arrays::stream)
-                .filter(el -> el.getText().equals(symbol))
+                .filter(el -> el.equals(symbol))
                 .count();
     }
 

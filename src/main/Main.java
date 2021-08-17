@@ -40,26 +40,26 @@ public class Main extends JFrame {
             return false;
         }
 
-        if (board.cells[0][0].getText().equals(symbol)
-                && board.cells[1][1].getText().equals(symbol)
-                && board.cells[2][2].getText().equals(symbol)) {
+        if (board.cells[0][0].equals(symbol)
+                && board.cells[1][1].equals(symbol)
+                && board.cells[2][2].equals(symbol)) {
             return true;
         }
-        if (board.cells[0][2].getText().equals(symbol)
-                && board.cells[1][1].getText().equals(symbol)
-                && board.cells[2][0].getText().equals(symbol)) {
+        if (board.cells[0][2].equals(symbol)
+                && board.cells[1][1].equals(symbol)
+                && board.cells[2][0].equals(symbol)) {
             return true;
         }
 
         for (int i = 0, j = 0; i < 3; i++, j++) {
-            if (board.cells[i][j].getText().equals(symbol)
-                    && board.cells[i][(j + 1) % 3].getText().equals(symbol)
-                    && board.cells[i][(j + 2) % 3].getText().equals(symbol)) {
+            if (board.cells[i][j].equals(symbol)
+                    && board.cells[i][(j + 1) % 3].equals(symbol)
+                    && board.cells[i][(j + 2) % 3].equals(symbol)) {
                 return true;
             }
-            if (board.cells[i][j].getText().equals(symbol)
-                    && board.cells[(i + 1) % 3][j].getText().equals(symbol)
-                    && board.cells[(i + 2) % 3][j].getText().equals(symbol)) {
+            if (board.cells[i][j].equals(symbol)
+                    && board.cells[(i + 1) % 3][j].equals(symbol)
+                    && board.cells[(i + 2) % 3][j].equals(symbol)) {
                 return true;
             }
         }
