@@ -1,7 +1,7 @@
 package main;
 
 import javax.swing.JPanel;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.util.Arrays;
 
 public class Board extends JPanel {
@@ -22,16 +22,17 @@ public class Board extends JPanel {
         }
     }
 
-    void enterSymbolAt(int r, int c) {
-        var foundCell = cells[r][c];
-        String symbol = String.valueOf(Main.currPlayer.symbol);
-        foundCell.setText(symbol);
+    Cell[] getEmptyCells() {
+        return Arrays.stream(cells)
+                .flatMap(Arrays::stream)
+                .filter(Cell::isEmpty)
+                .toArray(Cell[]::new);
     }
 
     long getCountOf(String symbol) {
         return Arrays.stream(this.cells)
                 .flatMap(Arrays::stream)
-                .filter(el -> el.equals(symbol))
+                .filter(el -> el.getSymbol().equals(symbol))
                 .count();
     }
 
@@ -41,6 +42,8 @@ public class Board extends JPanel {
                 .forEach(btn -> {
                     btn.setEnabled(false);
                     btn.setText(" ");
+                    btn.setSymbol(" ");
+                    btn.setBackground(null);
                 });
     }
 

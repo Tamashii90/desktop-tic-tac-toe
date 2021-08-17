@@ -53,8 +53,8 @@ public class ControlPanel extends JPanel {
     }
 
     void startGame() {
-        playerX = btnPlayerX.getText().equals("Human") ? new Human("X") : new EasyBot("X");
-        playerO = btnPlayerO.getText().equals("Human") ? new Human("O") : new EasyBot("O");
+        playerX = btnPlayerX.getText().equals("Human") ? new Human("X") : new MediumBot("X");
+        playerO = btnPlayerO.getText().equals("Human") ? new Human("O") : new MediumBot("O");
         currPlayer = playerX;
 
         gameState.setGameState(GameState.IN_PROGRESS);

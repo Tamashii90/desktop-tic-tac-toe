@@ -31,7 +31,7 @@ enum GameState {
         return Main.gameState;
     }
 
-    void handleGameState(String symbol) {
+    void processTurn(String symbol) {
         GameState newGameState = Main.gameState;
 
         if (Main.isWinner(symbol)) {

@@ -43,42 +43,38 @@ public class Main extends JFrame {
             return false;
         }
 
-        if (board.cells[0][0].equals(symbol)
-                && board.cells[1][1].equals(symbol)
-                && board.cells[2][2].equals(symbol)) {
+        if (board.cells[0][0].getSymbol().equals(symbol)
+                && board.cells[1][1].getSymbol().equals(symbol)
+                && board.cells[2][2].getSymbol().equals(symbol)) {
             isWinner = true;
             winningBtns = List.of(board.cells[0][0], board.cells[1][1], board.cells[2][2]);
-        } else if (board.cells[0][2].equals(symbol)
-                && board.cells[1][1].equals(symbol)
-                && board.cells[2][0].equals(symbol)) {
+        } else if (board.cells[0][2].getSymbol().equals(symbol)
+                && board.cells[1][1].getSymbol().equals(symbol)
+                && board.cells[2][0].getSymbol().equals(symbol)) {
             isWinner = true;
             winningBtns = List.of(board.cells[0][2], board.cells[1][1], board.cells[2][0]);
         }
 
         for (int i = 0, j = 0; i < 3; i++, j++) {
-            if (board.cells[i][j].equals(symbol)
-                    && board.cells[i][(j + 1) % 3].equals(symbol)
-                    && board.cells[i][(j + 2) % 3].equals(symbol)) {
+            if (board.cells[i][j].getSymbol().equals(symbol)
+                    && board.cells[i][(j + 1) % 3].getSymbol().equals(symbol)
+                    && board.cells[i][(j + 2) % 3].getSymbol().equals(symbol)) {
                 isWinner = true;
                 winningBtns = List.of(board.cells[i][j], board.cells[i][(j + 1) % 3],
                         board.cells[i][(j + 2) % 3]);
                 break;
-            } else if (board.cells[i][j].equals(symbol)
-                    && board.cells[(i + 1) % 3][j].equals(symbol)
-                    && board.cells[(i + 2) % 3][j].equals(symbol)) {
+            } else if (board.cells[i][j].getSymbol().equals(symbol)
+                    && board.cells[(i + 1) % 3][j].getSymbol().equals(symbol)
+                    && board.cells[(i + 2) % 3][j].getSymbol().equals(symbol)) {
                 isWinner = true;
                 winningBtns = List.of(board.cells[i][j], board.cells[(i + 1) % 3][j],
                         board.cells[(i + 2) % 3][j]);
                 break;
             }
         }
-        winningBtns.forEach(btn -> {
-            btn.setBackground(Color.CYAN);
-        });
+        winningBtns.forEach(btn -> btn.setBackground(Color.CYAN));
         return isWinner;
     }
-
-
 
     public static void main(String[] args) {
         new Main();

@@ -3,13 +3,13 @@ package main;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-
 import static main.Main.*;
 import static main.GameState.*;
 
 public class Cell extends JButton {
     int x;
     int y;
+    String symbol = " ";
 
     Cell(int x, int y) {
         this.x = x;
@@ -20,12 +20,39 @@ public class Cell extends JButton {
         addActionListener(this::clickHandler);
     }
 
-    public boolean equals(Object obj) {
-        return this.getText().equals(obj);
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
     boolean isEmpty() {
-        return this.getText().equals(" ");
+        return this.symbol.equals(" ");
+    }
+
+    boolean isPotentialWinner(String symbol) {
+        int x = this.x;
+        int y = this.y;
+
+        if (board.cells[x][(y + 1) % 3].getSymbol().equals(symbol)
+                && board.cells[x][(y + 2) % 3].getSymbol().equals(symbol)) {
+            return true;
+        }
+
+        if (board.cells[(x + 1) % 3][y].getSymbol().equals(symbol)
+                && board.cells[(x + 2) % 3][y].getSymbol().equals(symbol)) {
+            return true;
+        }
+
+        if (board.cells[(x + 1) % 3][(y + 1) % 3].getSymbol().equals(symbol)
+                && board.cells[(x + 2) % 3][(y + 2) % 3].getSymbol().equals(symbol)) {
+            return true;
+        }
+
+        return board.cells[(x + 1) % 3][(y + 2) % 3].getSymbol().equals(symbol)
+                && board.cells[(x + 2) % 3][(y + 1) % 3].getSymbol().equals(symbol);
     }
 
     public void clickHandler(ActionEvent e) {
@@ -34,8 +61,9 @@ public class Cell extends JButton {
         if (gameState.getGameState() != IN_PROGRESS || clickedBtn != this || !this.isEmpty()) {
             return;
         }
-        board.enterSymbolAt(this.x, this.y);
-        gameState.handleGameState(currPlayer.symbol);
+        this.setSymbol(currPlayer.symbol);
+        this.setText(currPlayer.symbol);
+        gameState.processTurn(currPlayer.symbol);
 
         if (gameState == IN_PROGRESS) {
             currPlayer = currPlayer == playerX ? playerO : playerX;
