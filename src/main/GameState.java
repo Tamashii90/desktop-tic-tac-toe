@@ -8,7 +8,7 @@ enum GameState {
     Draw;
 
     public String toString() {
-        String playerType = Main.currPlayer.isHuman ? "Human" : "Robot";
+        String playerType = Main.currPlayer.playerType == PlayerMode.HUMAN ? "Human" : "AI";
         String symbol = Main.currPlayer.symbol;
         switch (this) {
             case Draw:

@@ -1,8 +1,6 @@
 package main;
 
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static main.Main.*;
 
@@ -10,6 +8,7 @@ public class EasyBot extends AIPlayer {
 
     EasyBot(String symbol) {
         super(symbol);
+        this.playerType = PlayerMode.EASY;
     }
 
     public void actualMakeMove() {

@@ -4,7 +4,7 @@ public class Human extends Player {
 
     Human(String symbol) {
         super(symbol);
-        this.isHuman = true;
+        this.playerType = PlayerMode.HUMAN;
     }
 
     void makeMove() {

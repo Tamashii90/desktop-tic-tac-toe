@@ -1,11 +1,9 @@
 package main;
 
-import javax.swing.JPanel;
-import javax.swing.JButton;
+import javax.swing.*;
 import java.awt.GridLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.util.List;
 
 import static main.Main.*;
 
@@ -16,16 +14,16 @@ public class ControlPanel extends JPanel {
     JButton btnPlayerO;
 
     ControlPanel() {
-        btnPlayerX = new JButton("Human");
-        btnPlayerO = new JButton("Human");
+        btnPlayerX = new JButton(PlayerMode.HUMAN.displayStr);
+        btnPlayerO = new JButton(PlayerMode.HUMAN.displayStr);
         startResetBtn = new JButton("Start");
 
         btnPlayerX.setName("ButtonPlayer1");
         btnPlayerO.setName("ButtonPlayer2");
         startResetBtn.setName("ButtonStartReset");
 
-        btnPlayerX.addActionListener(this::choosePlayerHandler);
-        btnPlayerO.addActionListener(this::choosePlayerHandler);
+        btnPlayerX.addActionListener(this::choosePlayer);
+        btnPlayerO.addActionListener(this::choosePlayer);
         startResetBtn.addActionListener(this::startResetHandler);
 
         setLayout(new GridLayout(1, 3));
@@ -35,12 +33,10 @@ public class ControlPanel extends JPanel {
         add(btnPlayerO);
     }
 
-    void choosePlayerHandler(ActionEvent e) {
-        var possibleChoices = List.of("Human", "Robot");
-        var button = ((JButton) e.getSource());
-        var currValue = button.getText();
-        var newIdx = (possibleChoices.indexOf(currValue) + 1) % possibleChoices.size();
-        button.setText(possibleChoices.get(newIdx));
+    void choosePlayer(ActionEvent e) {
+        var button = (JButton) e.getSource();
+        var currValue = PlayerMode.parseMode(button.getText());
+        button.setText(currValue.getNextMode().displayStr);
     }
 
     void startResetHandler(ActionEvent e) {
@@ -53,8 +49,8 @@ public class ControlPanel extends JPanel {
     }
 
     void startGame() {
-        playerX = btnPlayerX.getText().equals("Human") ? new Human("X") : new MediumBot("X");
-        playerO = btnPlayerO.getText().equals("Human") ? new Human("O") : new MediumBot("O");
+        playerX = instantiatePlayer(btnPlayerX.getText(), "X");
+        playerO = instantiatePlayer(btnPlayerO.getText(), "O");
         currPlayer = playerX;
 
         gameState.setGameState(GameState.IN_PROGRESS);
@@ -74,5 +70,10 @@ public class ControlPanel extends JPanel {
         btnPlayerX.setEnabled(true);
         btnPlayerO.setEnabled(true);
         board.resetArrangement();
+    }
+
+    Player instantiatePlayer(String playerType, String symbol) {
+        PlayerMode mode = PlayerMode.parseMode(playerType);
+        return mode.instantiate(symbol);
     }
 }

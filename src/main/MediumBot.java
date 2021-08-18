@@ -9,6 +9,7 @@ public class MediumBot extends AIPlayer {
 
     MediumBot(String symbol) {
         super(symbol);
+        this.playerType = PlayerMode.MEDIUM;
     }
 
     public void actualMakeMove() {

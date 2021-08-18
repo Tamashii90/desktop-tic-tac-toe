@@ -7,7 +7,6 @@ abstract class AIPlayer extends Player {
 
     AIPlayer(String symbol) {
         super(symbol);
-        this.isHuman = false;
     }
 
     @Override

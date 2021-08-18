@@ -1,7 +1,7 @@
 package main;
 
 abstract class Player {
-    boolean isHuman;
+    PlayerMode playerType;
     String symbol;
 
     Player(String symbol) {
