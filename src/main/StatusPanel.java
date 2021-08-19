@@ -15,7 +15,6 @@ public class StatusPanel extends JPanel {
         setBorder(new EmptyBorder(8, 8, 8, 8));
         setLayout(new BorderLayout());
         statusLabel = new JLabel("Game is not started");
-        statusLabel.setName("LabelStatus");
 
         add(statusLabel, BorderLayout.WEST);
     }

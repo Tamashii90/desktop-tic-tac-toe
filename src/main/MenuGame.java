@@ -14,7 +14,6 @@ public class MenuGame extends JMenu {
 
     public MenuGame(String str) {
         super(str);
-        this.setName("MenuGame");
 
         JMenuItem menuHumanHuman = new JMenuItem("Human vs Human");
         JMenuItem menuHumanRobot = new JMenuItem("Human vs Robot");
@@ -26,12 +25,6 @@ public class MenuGame extends JMenu {
         itemToPlayerMap.put(menuHumanRobot, List.of("Human", "Robot"));
         itemToPlayerMap.put(menuRobotHuman, List.of("Robot", "Human"));
         itemToPlayerMap.put(menuRobotRobot, List.of("Robot", "Robot"));
-
-        menuHumanHuman.setName("MenuHumanHuman");
-        menuHumanRobot.setName("MenuHumanRobot");
-        menuRobotHuman.setName("MenuRobotHuman");
-        menuRobotRobot.setName("MenuRobotRobot");
-        menuExit.setName("MenuExit");
 
         menuHumanHuman.addActionListener(this::clickHandler);
         menuHumanRobot.addActionListener(this::clickHandler);

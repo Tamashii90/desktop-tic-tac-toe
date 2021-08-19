@@ -34,7 +34,7 @@ enum GameState {
     void processTurn(String symbol) {
         GameState newGameState = Main.gameState;
 
-        if (Main.isWinner(symbol)) {
+        if (Main.isWinner(symbol, false)) {
             newGameState = GameState.valueOf(symbol + "_WINS");
             Main.board.disableCells();
         } else if (Main.board.getCountOf(" ") == 0) {

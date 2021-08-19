@@ -1,183 +1,56 @@
 package main;
 
-import java.util.Arrays;
-import java.util.Random;
-
-import static main.Main.*;
+import java.util.*;
 
 public class HardBot extends AIPlayer {
-
     HardBot(String symbol) {
         super(symbol);
         this.playerType = PlayerMode.HARD;
     }
 
-    public void actualMakeMove() {
-        int x;
-        int y;
-        Cell chosenCell = trySmartMove();
-        if (chosenCell != null) {
-            System.out.println("smart move!");
-        }
-        if (chosenCell == null) {
-            do {
-                x = new Random().nextInt(3);
-                y = new Random().nextInt(3);
-            } while (!Main.board.cells[x][y].isEmpty());
-            chosenCell = Main.board.cells[x][y];
-        }
+    void actualMakeMove() {
+        var chosenMove = minimax(this.symbol);
+        var chosenCell = (Cell) chosenMove.get("cell");
         chosenCell.doClick();
     }
 
-    Cell trySmartMove() {
-        Cell p = tryWinMove();
-        return p != null ? p : tryBlockWinMove();
-    }
+    HashMap<String, Object> minimax(String currSymbol) {
+        var entry = new HashMap<String, Object>();
+        int score;
 
-    Cell tryWinMove() {
-        Cell p;
-        if (currPlayer.symbol.equals("X")) {
-            p = smartMove("X");
-        } else {
-            p = smartMove("O");
+        if (Main.isWinner("X", true) || Main.isWinner("O", true)) {
+            // NOT sign because it's checking whether the symbol from
+            // PREVIOUS iteration is a winner
+            score = !this.symbol.equals(currSymbol) ? 10 : -10;
+            entry.put("score", score);
+            return entry;
         }
-        return p;
-    }
-
-    Cell tryBlockWinMove() {
-        Cell p;
-        if (currPlayer.symbol.equals("X")) {
-            p = smartMove("O");
-        } else {
-            p = smartMove("X");
-        }
-        return p;
-    }
-
-    Cell smartMove(String symbol) {
-        Cell[] emptyCells;
-        if (board.getCountOf(symbol) < 2) {
-            return null;
+        if (Main.board.getCountOf(" ") == 0) {
+            score = 0;
+            entry.put("score", score);
+            return entry;
         }
 
-        emptyCells = board.getEmptyCells();
-        return Arrays.stream(emptyCells)
-                .filter(cell -> cell.isPotentialWinner(symbol))
-                .findFirst()
-                .orElse(null);
+        var emptyCells = Main.board.getEmptyCells();
+        var listOfMoves = new ArrayList<HashMap<String, Object>>();
+        for (Cell cell : emptyCells) {
+            cell.setSymbol(currSymbol);
+            String newSymbol = currSymbol.equals("X") ? "O" : "X";
+            var move = minimax(newSymbol);
+            move.put("cell", cell);
+            listOfMoves.add(move);
+            cell.setSymbol(" ");
+        }
+        return calcEntry(listOfMoves, currSymbol);
+    }
+    HashMap<String, Object> calcEntry(List<HashMap<String, Object>> entries, String currPlayer) {
+        if (this.symbol.equals(currPlayer)) {
+            return entries.stream()
+                    .max(Comparator.comparing(map -> (int) map.get("score")))
+                    .get();
+        }
+        return entries.stream()
+                .min(Comparator.comparing(map -> (int) map.get("score")))
+                .get();
     }
 }
-
-//package main;
-//
-//import java.util.List;
-//import java.util.ArrayList;
-//import java.util.HashMap;
-//import java.util.Arrays;
-//
-//public class HardBot extends Player {
-//    public final char BOT_SYMBOL;
-//    char[][] BOARD = new char[3][3];
-//    final List<Point> allCoords = new ArrayList<>();
-//
-//    void initialize() {
-//        for (int i = 0; i < 3; i++) {
-//            for (int j = 0; j < 3; j++) {
-//                allCoords.add(new Point(i, j));
-//            }
-//        }
-//    }
-//
-//    public HardBot(char symbol) {
-//        this.BOT_SYMBOL = symbol;
-//        initialize();
-//    }
-//
-//    static char[][] deepCopy(char[][] arr) {
-//        char[][] copy = new char[arr.length][];
-//        for (int i = 0; i < copy.length; i++){
-//            copy[i] = Arrays.copyOf(arr[i], arr[i].length);
-//        }
-//        return copy;
-//    }
-//
-//    public void makeMove() {
-//        System.out.println("Making move level \"hard\"");
-//        int x;
-//        int y;
-//        BOARD = deepCopy(Main.ARRANGEMENT);
-//        var chosenMove = minimax(BOT_SYMBOL);
-//        x = ((Point) chosenMove.get("coords")).x;
-//        y = ((Point) chosenMove.get("coords")).y;
-//        try {
-//            Main.enterCoords(x, y);
-//        } catch (Exception e) {}
-//    }
-//
-//    HashMap<String, Object> minimax(char currPlayer) {
-//        var entry = new HashMap<String, Object>();
-//        int score;
-//        if (isWinner('X') || isWinner('O')) {
-//            score = BOT_SYMBOL != currPlayer ? 10 : -10;
-//            entry.put("score", score);
-//            return entry;
-//        }
-//        if (getEmptySlots().size() == 0) {
-//            score = 0;
-//            entry.put("score", score);
-//            return entry;
-//        }
-//
-//        var emptySlots = getEmptySlots();
-//        var listOfMoves = new ArrayList<HashMap<String, Object>>();
-//        for (Point p : emptySlots) {
-//            addPoint(p, currPlayer);
-//            char newPlayer = currPlayer == 'X' ? 'O' : 'X';
-//            var move = minimax(newPlayer);
-//            move.put("coords", p);
-//            listOfMoves.add(move);
-//            removePoint(p, currPlayer);
-//        }
-//        return calcEntry(listOfMoves, currPlayer);
-//    }
-//    HashMap<String, Object> calcEntry(List<HashMap<String, Object>> entries, char currPlayer) {
-//        if (BOT_SYMBOL == currPlayer) {
-//            return entries.stream()
-//                    .reduce(entries.get(0), (acc, el) ->
-//                            ((int) acc.get("score")) >= ((int) el.get("score")) ? acc : el);
-//        }
-//        return entries.stream().reduce(entries.get(0), (acc, el) ->
-//                ((int) acc.get("score")) <= ((int) el.get("score")) ? acc : el);
-//    }
-//
-//    void addPoint(Point p, char symbol) {
-//        BOARD[p.x][p.y] = symbol;
-//    }
-//
-//    void removePoint(Point p, char symbol) {
-//        BOARD[p.x][p.y] = ' ';
-//    }
-//
-//    boolean isWinner(char symbol) {
-//        return (BOARD[0][0] == symbol && BOARD[0][1] == symbol && BOARD[0][2] == symbol ||
-//                BOARD[1][0] == symbol && BOARD[1][1] == symbol && BOARD[1][2] == symbol ||
-//                BOARD[2][0] == symbol && BOARD[2][1] == symbol && BOARD[2][2] == symbol ||
-//                BOARD[0][0] == symbol && BOARD[1][0] == symbol && BOARD[2][0] == symbol ||
-//                BOARD[0][1] == symbol && BOARD[1][1] == symbol && BOARD[2][1] == symbol ||
-//                BOARD[0][2] == symbol && BOARD[1][2] == symbol && BOARD[2][2] == symbol ||
-//                BOARD[0][0] == symbol && BOARD[1][1] == symbol && BOARD[2][2] == symbol ||
-//                BOARD[2][0] == symbol && BOARD[1][1] == symbol && BOARD[0][2] == symbol);
-//    }
-//
-//    List<Point> getEmptySlots() {
-//        List<Point> emptySlots = new ArrayList<>();
-//        for (int i = 0; i <= 2; i++) {
-//            for (int j = 0; j <=2; j++) {
-//                if (BOARD[i][j] == ' ') {
-//                    emptySlots.add(new Point(i, j));
-//                }
-//            }
-//        }
-//        return emptySlots;
-//    }
-//}

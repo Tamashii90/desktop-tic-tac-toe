@@ -18,8 +18,6 @@ public class Main extends JFrame {
     static Board board = new Board();
     static StatusPanel statusPanel = new StatusPanel();
     static ControlPanel controlPanel = new ControlPanel();
-    static MenuGame menuGame = new MenuGame("Game");
-
 
     Main() {
         super("Tic Tac Toe");
@@ -35,8 +33,10 @@ public class Main extends JFrame {
     }
 
 
-
-    static boolean isWinner(String symbol) {
+    static boolean isWinner(String symbol, boolean isSimulation) {
+        // isSimulation is used to check whether the AI is calling isWinner for
+        // decision-making (e.g. minimax algorithm) or whether it's being called
+        // to actually check the winner between turns
         boolean isWinner = false;
         List<Cell> winningBtns = new ArrayList<>();
         if (board.getCountOf(symbol) < 3) {
@@ -55,24 +55,29 @@ public class Main extends JFrame {
             winningBtns = List.of(board.cells[0][2], board.cells[1][1], board.cells[2][0]);
         }
 
-        for (int i = 0, j = 0; i < 3; i++, j++) {
-            if (board.cells[i][j].getSymbol().equals(symbol)
-                    && board.cells[i][(j + 1) % 3].getSymbol().equals(symbol)
-                    && board.cells[i][(j + 2) % 3].getSymbol().equals(symbol)) {
-                isWinner = true;
-                winningBtns = List.of(board.cells[i][j], board.cells[i][(j + 1) % 3],
-                        board.cells[i][(j + 2) % 3]);
-                break;
-            } else if (board.cells[i][j].getSymbol().equals(symbol)
-                    && board.cells[(i + 1) % 3][j].getSymbol().equals(symbol)
-                    && board.cells[(i + 2) % 3][j].getSymbol().equals(symbol)) {
-                isWinner = true;
-                winningBtns = List.of(board.cells[i][j], board.cells[(i + 1) % 3][j],
-                        board.cells[(i + 2) % 3][j]);
-                break;
+        if (!isWinner) {
+            for (int i = 0, j = 0; i < 3; i++, j++) {
+                if (board.cells[i][j].getSymbol().equals(symbol)
+                        && board.cells[i][(j + 1) % 3].getSymbol().equals(symbol)
+                        && board.cells[i][(j + 2) % 3].getSymbol().equals(symbol)) {
+                    isWinner = true;
+                    winningBtns = List.of(board.cells[i][j], board.cells[i][(j + 1) % 3],
+                            board.cells[i][(j + 2) % 3]);
+                    break;
+                } else if (board.cells[i][j].getSymbol().equals(symbol)
+                        && board.cells[(i + 1) % 3][j].getSymbol().equals(symbol)
+                        && board.cells[(i + 2) % 3][j].getSymbol().equals(symbol)) {
+                    isWinner = true;
+                    winningBtns = List.of(board.cells[i][j], board.cells[(i + 1) % 3][j],
+                            board.cells[(i + 2) % 3][j]);
+                    break;
+                }
             }
         }
-        winningBtns.forEach(btn -> btn.setBackground(Color.CYAN));
+
+        if (!isSimulation) {
+            winningBtns.forEach(btn -> btn.setBackground(Color.DARK_GRAY));
+        }
         return isWinner;
     }
 
@@ -81,11 +86,6 @@ public class Main extends JFrame {
     }
 
     void initComponents() {
-        JMenuBar menuBar = new JMenuBar();
-        menuGame.setMnemonic(KeyEvent.VK_G);
-        menuBar.add(menuGame);
-
-        setJMenuBar(menuBar);
         add(controlPanel);
         add(board);
         add(statusPanel);

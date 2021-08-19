@@ -16,9 +16,7 @@ public class MediumBot extends AIPlayer {
         int x;
         int y;
         Cell chosenCell = trySmartMove();
-        if (chosenCell != null) {
-            System.out.println("smart move!");
-        }
+
         if (chosenCell == null) {
             do {
                 x = new Random().nextInt(3);

@@ -10,13 +10,11 @@ public class Board extends JPanel {
     Board() {
         super();
         setLayout(new GridLayout(3, 3));
-        char[] arr = new char[]{'A', 'B', 'C'};
-        for (int i = 3; i >= 1; i--) {
+        for (int i = 0; i <= 2; i++) {
             for (int j = 0; j <= 2; j++) {
-                var cell = new Cell(i - 1, j);
-                cell.setName("Button" + arr[j] + i);
+                var cell = new Cell(i, j);
                 cell.setText(" ");
-                cells[i - 1][j] = cell;
+                cells[i][j] = cell;
                 this.add(cell);
             }
         }

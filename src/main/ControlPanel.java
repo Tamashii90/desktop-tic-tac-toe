@@ -18,10 +18,6 @@ public class ControlPanel extends JPanel {
         btnPlayerO = new JButton(PlayerMode.HUMAN.displayStr);
         startResetBtn = new JButton("Start");
 
-        btnPlayerX.setName("ButtonPlayer1");
-        btnPlayerO.setName("ButtonPlayer2");
-        startResetBtn.setName("ButtonStartReset");
-
         btnPlayerX.addActionListener(this::choosePlayer);
         btnPlayerO.addActionListener(this::choosePlayer);
         startResetBtn.addActionListener(this::startResetHandler);
