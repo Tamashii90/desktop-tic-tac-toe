@@ -1,7 +1,7 @@
 package main;
 
 import javax.swing.JButton;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import static main.Main.*;
 import static main.GameState.*;
@@ -16,7 +16,7 @@ public class Cell extends JButton {
         this.y = y;
         setFocusPainted(false);
         setEnabled(false);
-        setFont(new Font("Courier", Font.BOLD, 40));
+        setFont(new Font("Courier", Font.ITALIC,45));
         addActionListener(this::clickHandler);
     }
 

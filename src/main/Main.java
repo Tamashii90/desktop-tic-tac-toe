@@ -1,10 +1,9 @@
 package main;
 
-import javax.swing.JFrame;
-import javax.swing.BoxLayout;
-import javax.swing.JMenuBar;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +25,9 @@ public class Main extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+        URL iconURL = getClass().getResource("/icon.png");
+        ImageIcon icon = new ImageIcon(iconURL);
+        setIconImage(icon.getImage());
 
         initComponents();
 
@@ -76,7 +78,7 @@ public class Main extends JFrame {
         }
 
         if (!isSimulation) {
-            winningBtns.forEach(btn -> btn.setBackground(Color.DARK_GRAY));
+            winningBtns.forEach(btn -> btn.setBackground(new Color(103, 83, 206)));
         }
         return isWinner;
     }

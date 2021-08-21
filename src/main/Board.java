@@ -54,6 +54,9 @@ public class Board extends JPanel {
     void enableCells() {
         Arrays.stream(this.cells)
                 .flatMap(Arrays::stream)
-                .forEach(btn -> btn.setEnabled(true));
+                .forEach(btn -> {
+                    btn.setBackground(Color.WHITE);
+                    btn.setEnabled(true);
+                });
     }
 }
